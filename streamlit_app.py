@@ -58,11 +58,12 @@ def find_similar_novels(title_id):
 def main():
     st.title("Novel Recommendation App")
 
-    # Add interactive widgets
-    novels_input = st.text_input("Enter a novel title:", "Search Here")
+    # Create a dropdown select box for novel titles
+    novels_list = novels["Title"].tolist()
+    selected_novel = st.selectbox("Select a Novel Title:", novels_list)
 
-    if len(novels_input) > 3:
-        results = search(novels_input)
+    if selected_novel:
+        results = search(selected_novel)
         if not results.empty:
             title_id = results.iloc[0]['title_id']
             similar_novels = find_similar_novels(title_id)

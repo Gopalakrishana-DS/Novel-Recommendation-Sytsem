@@ -56,22 +56,38 @@ def find_similar_novels(title_id):
 
 # Streamlit app
 def main():
-    st.title("Novel Recommendation App")
+    st.title("Novel Recommendation Engine")
 
     # Create a dropdown select box for novel titles
     novels_list = novels["Title"].tolist()
-    selected_novel = st.selectbox("Select a Novel Title:", novels_list)
+    selected_novel = st.selectbox(
+        "Select a Novel Title:",
+        novels_list,
+        index=0,
+        help="Start typing to search for a novel..."
+    )
 
-    if selected_novel:
-        results = search(selected_novel)
-        if not results.empty:
-            title_id = results.iloc[0]['title_id']
-            similar_novels = find_similar_novels(title_id)
+    # Add some spacing
+    st.write("")
 
-            st.subheader("Recommended Similar Novels:")
-            st.dataframe(similar_novels)
-        else:
-            st.warning("No matching results found.")
+    # Add a "Search" button
+    if st.button("Search"):
+        if selected_novel:
+            results = search(selected_novel)
+            if not results.empty:
+                title_id = results.iloc[0]['title_id']
+                similar_novels = find_similar_novels(title_id)
+
+                st.subheader("Recommended Similar Novels:")
+                st.dataframe(similar_novels)
+            else:
+                st.warning("No matching results found.")
+
+    # Add a "Clear" button
+    if st.button("Clear"):
+        selected_novel = ""
+        st.empty()  # Clear the recommendation results
 
 if __name__ == "__main__":
     main()
+
